@@ -2,6 +2,7 @@ package tacos.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,6 +41,12 @@ public class DesignTacoController {
 		model.addAttribute("design", new Taco());
 				
 		return "design";
+	}
+	
+	private List<Ingredient> filterByType(List<Ingredient> ingredients, Ingredient.Type type) {
+		return ingredients.stream()
+				.filter(ingredient -> ingredient.getType() == type)
+				.collect(Collectors.toList());
 	}
 	
 }
