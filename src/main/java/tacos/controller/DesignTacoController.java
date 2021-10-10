@@ -40,15 +40,15 @@ public class DesignTacoController {
 			model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
 		}
 		
-		model.addAttribute("design", new Taco());
+		model.addAttribute("taco", new Taco());
 				
 		return "design";
 	}
 	
 	@PostMapping
-	public String processDesign(Design design) {
+	public String processDesign(Taco taco) {
 		// to do
-		log.info("Processing design: " + design);
+		log.info("Processing design: " + taco);
 		
 		return "redirect:/orders/current";
 	}
