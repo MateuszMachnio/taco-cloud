@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import lombok.extern.slf4j.Slf4j;
 import tacos.data.repositoryInterface.IngredientRepository;
 import tacos.data.repositoryInterface.TacoRepository;
 import tacos.entity.Ingredient;
@@ -25,7 +24,6 @@ import tacos.entity.Ingredient.Type;
 import tacos.entity.Order;
 import tacos.entity.Taco;
 
-@Slf4j
 @Controller
 @RequestMapping("/design")
 @SessionAttributes("order")
