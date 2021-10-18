@@ -1,7 +1,6 @@
 package tacos.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,10 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import tacos.data.repositoryInterface.IngredientRepository;
-import tacos.data.repositoryInterface.TacoRepository;
 import tacos.entity.Ingredient;
 import tacos.entity.Ingredient.Type;
+import tacos.repository.IngredientRepository;
+import tacos.repository.TacoRepository;
 import tacos.entity.Order;
 import tacos.entity.Taco;
 
