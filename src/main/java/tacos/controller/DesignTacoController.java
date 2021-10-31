@@ -37,6 +37,8 @@ import tacos.entity.Ingredient;
 import tacos.entity.Ingredient.Type;
 import tacos.repository.IngredientRepository;
 import tacos.repository.TacoRepository;
+import tacos.web.api.TacoModel;
+import tacos.web.api.TacoRepresentationModelAssembler;
 import tacos.entity.Order;
 import tacos.entity.Taco;
 
@@ -65,12 +67,12 @@ public class DesignTacoController {
 	}
 	
 	@GetMapping("/recent")
-	public CollectionModel<EntityModel<Taco>> recentTacos() {
+	public CollectionModel<TacoModel> recentTacos() {
 		PageRequest page = PageRequest.of(0, 12, Sort.by("createdAt").descending());
 		List<Taco> tacos = tacoRepo.findAll(page).getContent();
-		CollectionModel<EntityModel<Taco>> recentResources = CollectionModel.wrap(tacos);
-		recentResources.add(linkTo(methodOn(DesignTacoController.class).recentTacos()).withRel("recents"));
-		return recentResources;
+		CollectionModel<TacoModel> tacoModels = new TacoRepresentationModelAssembler().toCollectionModel(tacos);
+		tacoModels.add(linkTo(methodOn(DesignTacoController.class).recentTacos()).withRel("recents"));
+		return tacoModels;
 	}
 	
 	@GetMapping("/{id}")
