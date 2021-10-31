@@ -10,7 +10,13 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.EntityLinks;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -59,9 +65,12 @@ public class DesignTacoController {
 	}
 	
 	@GetMapping("/recent")
-	public Iterable<Taco> recentTacos() {
+	public CollectionModel<EntityModel<Taco>> recentTacos() {
 		PageRequest page = PageRequest.of(0, 12, Sort.by("createdAt").descending());
-		return tacoRepo.findAll(page).getContent();
+		List<Taco> tacos = tacoRepo.findAll(page).getContent();
+		CollectionModel<EntityModel<Taco>> recentResources = CollectionModel.wrap(tacos);
+		recentResources.add(linkTo(methodOn(DesignTacoController.class).recentTacos()).withRel("recents"));
+		return recentResources;
 	}
 	
 	@GetMapping("/{id}")
