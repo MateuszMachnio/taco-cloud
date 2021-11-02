@@ -11,7 +11,8 @@ public class TacoRepresentationModelAssembler extends RepresentationModelAssembl
 		super(DesignTacoController.class, TacoModel.class);
 	}
 	
-	@Override protected TacoModel instantiateModel(Taco taco) { 
+	@Override 
+	protected TacoModel instantiateModel(Taco taco) { 
 		return new TacoModel(taco); 
 	}
 	
