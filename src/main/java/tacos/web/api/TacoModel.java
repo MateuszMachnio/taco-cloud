@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import lombok.Getter;
 import tacos.entity.Ingredient;
 import tacos.entity.Taco;
 
+@Relation(value = "taco", collectionRelation = "tacos")
 public class TacoModel extends RepresentationModel<TacoModel> {
 
 	private static final IngredientRepresentationModelAssembler ingredientAssembler = new IngredientRepresentationModelAssembler();
