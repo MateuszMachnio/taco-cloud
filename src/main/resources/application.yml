@@ -3,6 +3,7 @@ spring:
     username: root
     password: 1qaz2wsx
   jpa:    hibernate:      ddl-auto: update
+  data:    rest:      base-path: /api
         
 taco:
   orders:
