@@ -34,7 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tacos.entity.Ingredient;
-import tacos.entity.Ingredient.Type;
 import tacos.repository.IngredientRepository;
 import tacos.repository.TacoRepository;
 import tacos.web.api.TacoModel;
@@ -47,60 +46,46 @@ import tacos.entity.Taco;
 @CrossOrigin(origins = "*")
 public class DesignTacoController {
 	
-	private final TacoRepository tacoRepo;
-	
-	@Autowired
-	EntityLinks entityLinks;
-	
-	public DesignTacoController(TacoRepository tacoRepo) {
-		this.tacoRepo = tacoRepo;
-	}
-	
-	@ModelAttribute(name = "order")
-	public Order order() {
-		return new Order();
-	}
-	
-	@ModelAttribute(name = "taco")
-	public Taco taco() {
-		return new Taco();
-	}
-	
-	@GetMapping("/recent")
-	public CollectionModel<TacoModel> recentTacos() {
-		PageRequest page = PageRequest.of(0, 12, Sort.by("createdAt").descending());
-		List<Taco> tacos = tacoRepo.findAll(page).getContent();
-		CollectionModel<TacoModel> tacoModels = new TacoRepresentationModelAssembler().toCollectionModel(tacos);
-		tacoModels.add(linkTo(methodOn(DesignTacoController.class).recentTacos()).withRel("recents"));
-		return tacoModels;
-	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<Taco> tacoById(@PathVariable("id") Long id) {
-		Optional<Taco> optTaco = tacoRepo.findById(id);
-		if (optTaco.isPresent()) {
-			return new ResponseEntity<>(optTaco.get(), HttpStatus.OK);
-		}
-		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		
-	}
-
-	@GetMapping
-	public String showDesignForm(Model model) {
-		List<Ingredient> ingredients = new ArrayList<>();
-		ingredientRepo.findAll().forEach(ingredient -> ingredients.add(ingredient));
-		
-		Type[] types = Ingredient.Type.values();
-		for (Type type : types) {
-			model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
-		}
-		
-		model.addAttribute("taco", new Taco());
-				
-		return "design";
-	}
-	
 	/*
+	 * private final TacoRepository tacoRepo;
+	 * 
+	 * @Autowired EntityLinks entityLinks;
+	 * 
+	 * public DesignTacoController(TacoRepository tacoRepo) { this.tacoRepo =
+	 * tacoRepo; }
+	 * 
+	 * @ModelAttribute(name = "order") public Order order() { return new Order(); }
+	 * 
+	 * @ModelAttribute(name = "taco") public Taco taco() { return new Taco(); }
+	 * 
+	 * @GetMapping("/recent") public CollectionModel<TacoModel> recentTacos() {
+	 * PageRequest page = PageRequest.of(0, 12, Sort.by("createdAt").descending());
+	 * List<Taco> tacos = tacoRepo.findAll(page).getContent();
+	 * CollectionModel<TacoModel> tacoModels = new
+	 * TacoRepresentationModelAssembler().toCollectionModel(tacos);
+	 * tacoModels.add(linkTo(methodOn(DesignTacoController.class).recentTacos()).
+	 * withRel("recents")); return tacoModels; }
+	 * 
+	 * @GetMapping("/{id}") public ResponseEntity<Taco> tacoById(@PathVariable("id")
+	 * Long id) { Optional<Taco> optTaco = tacoRepo.findById(id); if
+	 * (optTaco.isPresent()) { return new ResponseEntity<>(optTaco.get(),
+	 * HttpStatus.OK); } return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	 * 
+	 * }
+	 * 
+	 * @GetMapping public String showDesignForm(Model model) { List<Ingredient>
+	 * ingredients = new ArrayList<>(); ingredientRepo.findAll().forEach(ingredient
+	 * -> ingredients.add(ingredient));
+	 * 
+	 * Type[] types = Ingredient.Type.values(); for (Type type : types) {
+	 * model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients,
+	 * type)); }
+	 * 
+	 * model.addAttribute("taco", new Taco());
+	 * 
+	 * return "design"; }
+	 * 
+	 * 
 	 * @PostMapping public String processDesign(@Valid Taco taco, Errors
 	 * errors, @ModelAttribute Order order) { if (errors.hasErrors()) { return
 	 * "design"; }
@@ -108,21 +93,19 @@ public class DesignTacoController {
 	 * Taco saved = tacoRepo.save(taco); order.addTaco(saved);
 	 * 
 	 * return "redirect:/orders/current"; }
+	 * 
+	 * @PostMapping(consumes = "application/json")
+	 * 
+	 * @ResponseStatus(HttpStatus.CREATED) public Taco postTaco(@RequestBody Taco
+	 * taco) { return tacoRepo.save(taco); }
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * private List<Ingredient> filterByType(List<Ingredient> ingredients,
+	 * Ingredient.Type type) { return ingredients.stream() .filter(ingredient ->
+	 * ingredient.getType() == type) .collect(Collectors.toList()); }
 	 */
-	@PostMapping(consumes = "application/json")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Taco postTaco(@RequestBody Taco taco) {
-		return tacoRepo.save(taco);
-	}
-	
-	
-	
-	
-	
-	private List<Ingredient> filterByType(List<Ingredient> ingredients, Ingredient.Type type) {
-		return ingredients.stream()
-				.filter(ingredient -> ingredient.getType() == type)
-				.collect(Collectors.toList());
-	}
 	
 }

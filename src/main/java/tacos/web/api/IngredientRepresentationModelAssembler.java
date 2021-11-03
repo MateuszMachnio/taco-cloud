@@ -1,14 +1,14 @@
 package tacos.web.api;
 
-import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 
+import tacos.controller.DesignTacoController;
 import tacos.entity.Ingredient;
 
 public class IngredientRepresentationModelAssembler extends RepresentationModelAssemblerSupport<Ingredient, IngredientModel> {
 
 	public IngredientRepresentationModelAssembler() {
-		super(IngredientController2.class, IngredientModel.class);
+		super(DesignTacoController.class, IngredientModel.class);
 	}
 	
 	@Override
